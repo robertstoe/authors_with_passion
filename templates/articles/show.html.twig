@@ -1,9 +1,9 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-<h1>{{ article }}</h1>
+<h1>{{ article.getTitle() }}</h1>
 
-<div>
-    article content goes here
-</div>
+<p>
+    {{ article.getContent() }}
+</p>
 {% endblock %}
