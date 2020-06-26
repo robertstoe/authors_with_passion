@@ -58,16 +58,16 @@ class Article
     /**
      * @var \Doctrine\Common\Collections\Collection
      *
-     * @ORM\ManyToMany(targetEntity="Tag", mappedBy="articleid")
+     * @ORM\ManyToMany(targetEntity="Tag", mappedBy="articles")
      */
-    private $tagid;
+    private $tags;
 
     /**
      * Constructor
      */
     public function __construct()
     {
-        $this->tagid = new ArrayCollection();
+        $this->tags = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     public function getArticlesid(): ?int
@@ -126,26 +126,26 @@ class Article
     /**
      * @return Collection|Tag[]
      */
-    public function getTagid(): Collection
+    public function getTags(): Collection
     {
-        return $this->tagid;
+        return $this->tags;
     }
 
-    public function addTagid(Tag $tagid): self
+    public function addTag(Tag $tag): self
     {
-        if (!$this->tagid->contains($tagid)) {
-            $this->tagid[] = $tagid;
-            $tagid->addArticleid($this);
+        if (!$this->tags->contains($tag)) {
+            $this->tags[] = $tag;
+            $tag->addArticleid($this);
         }
 
         return $this;
     }
 
-    public function removeTagid(Tag $tagid): self
+    public function removeTag(Tag $tag): self
     {
-        if ($this->tagid->contains($tagid)) {
-            $this->tagid->removeElement($tagid);
-            $tagid->removeArticleid($this);
+        if ($this->tags->contains($tag)) {
+            $this->tags->removeElement($tag);
+            $tag->removeArticleid($this);
         }
 
         return $this;

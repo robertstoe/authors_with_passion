@@ -43,14 +43,14 @@ class Tag
      *   }
      * )
      */
-    private $articleid;
+    private $articles;
 
     /**
      * Constructor
      */
     public function __construct()
     {
-        $this->articleid = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->articles = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     public function getTagsid(): ?int
@@ -73,24 +73,24 @@ class Tag
     /**
      * @return Collection|Article[]
      */
-    public function getArticleid(): Collection
+    public function getArticles(): Collection
     {
-        return $this->articleid;
+        return $this->articles;
     }
 
-    public function addArticleid(Article $articleid): self
+    public function addArticle(Article $article): self
     {
-        if (!$this->articleid->contains($articleid)) {
-            $this->articleid[] = $articleid;
+        if (!$this->articles->contains($article)) {
+            $this->articles[] = $article;
         }
 
         return $this;
     }
 
-    public function removeArticleid(Article $articleid): self
+    public function removeArticle(Article $article): self
     {
-        if ($this->articleid->contains($articleid)) {
-            $this->articleid->removeElement($articleid);
+        if ($this->articles->contains($article)) {
+            $this->articles->removeElement($article);
         }
 
         return $this;

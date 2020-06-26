@@ -1,0 +1,15 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>
+        {{ author.getName() }} "{{ author.getNickname() }}" {{ author.getSurname() }}
+        <br>
+        Rating: {{ author.getRating() }}
+    </h1>
+    <br>
+    <ul>
+        {% for article in articles %}
+            <li><a href="{{ path('app_article_show', {id: article.Articlesid()}) }}"> {{ article.getTitle() }}</li> </a>
+        {% endfor %}
+    </ul>
+{% endblock %}

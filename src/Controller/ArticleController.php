@@ -5,7 +5,6 @@ namespace App\Controller;
 
 use App\Entity\Article;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 class ArticleController extends AbstractController
@@ -15,8 +14,8 @@ class ArticleController extends AbstractController
      */
     public function homepage()
     {
-        $articles = $this->getDoctrine()->getRepository(Article::class)->findAll();
-
+        $articles = $this->getDoctrine()->getRepository(Article::class)->findBy([],['creationDate' => 'DESC']);
+        //dump($articles);
         return $this->render('homepage.html.twig', array('articles'=> $articles));
     }
 
@@ -27,6 +26,6 @@ class ArticleController extends AbstractController
     {
         $article = $this->getDoctrine()->getRepository(Article::class)->find($id);
 
-        return $this->render('articles/show.html.twig', array('article'=>$article));
+        return $this->render('articles/show.html.twig', array('article'=>$article, 'author'=>$article->getAuthorid(), 'tags'=>$article->getTags()));
     }
 }

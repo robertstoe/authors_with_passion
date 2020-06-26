@@ -1,30 +1,26 @@
 <?php
 
+
 namespace App\Repository;
 
-use App\Entity\Article;
+use App\Entity\Tag;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
- * @method Article|null find($id, $lockMode = null, $lockVersion = null)
- * @method Article|null findOneBy(array $criteria, array $orderBy = null)
- * @method Article[]    findAll()
- * @method Article[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
+ * @method Tag|null find($id, $lockMode = null, $lockVersion = null)
+ * @method Tag|null findOneBy(array $criteria, array $orderBy = null)
+ * @method Tag[]    findAll()
+ * @method Tag[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class ArticleRepository
+class TagRepository
 {
-    /**
-     * @var App\Entity\Repository\DoctrineArticleRepository
-     */
-    private $doctrineArticleRepo;
-
     public function __construct(ManagerRegistry $registry)
     {
-        parent::__construct($registry, Article::class);
+        parent::__construct($registry, Tag::class);
     }
 
     // /**
-    //  * @return Article[] Returns an array of Author objects
+    //  * @return Tag[] Returns an array of Tag objects
     //  */
     /*
     public function findByExampleField($value)
@@ -41,7 +37,7 @@ class ArticleRepository
     */
 
     /*
-    public function findOneBySomeField($value): ?Article
+    public function findOneBySomeField($value): ?Tag
     {
         return $this->createQueryBuilder('a')
             ->andWhere('a.exampleField = :val')
