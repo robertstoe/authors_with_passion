@@ -1,9 +1,28 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-    <ul>
+
+    <div class="container">
         {% for article in articles %}
-            <li><a href="{{ path('app_article_show', {id: article.Articlesid()}) }}"> {{ article.getTitle() }} </a></li>
+
+        <h1>{{ article.getTitle() }}</h1>
+        <p>{{ article.getContent()[:400]|striptags ~ ' ...' }}</p>
+        <div>
+            <h5><span class="badge badge-info">{{ article.getCreationDate()|date("m/d/Y") }}</span></h5>
+            {#format_datetime(,"m/d/Y", #}
+            <div class="float-right">
+                {% set tags = article.getTags() %}
+
+                {% for tag in tags %}
+                <span class="label">{{ tag.getTagname() }}</span>
+                {% endfor %}
+
+                <span class="badge badge-pill badge-secondary">fiction</span>
+            </div>
+        </div>
+            <br>
+        <a class="btn btn-blog pull-right marginBottom10" href="{{ path('app_article_show', {id: article.Articlesid()}) }}">READ MORE</a>
+        <hr>
         {% endfor %}
-    </ul>
+
 {% endblock %}

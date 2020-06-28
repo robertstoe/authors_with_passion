@@ -11,14 +11,29 @@
     {% endblock %}
 </head>
 <body>
-<nav class="navbar navbar-light bg-light" style="height: 100px;">
-    <a class="navbar-brand" href="{{ path('app_homepage') }}">
-        <i style="color: #444; font-size: 2rem;" class="pb-1 fad fa-cauldron"></i>
-        <p class="pl-2 d-inline font-weight-bold" style="color: #444;">Cauldron Overflow</p>
-    </a>
-    <button class="btn btn-dark">Sign up</button>
+<nav class="navbar navbar-dark bg-dark navbar-expand-lg" style="height: 75px;">
+    <a class="navbar-brand" href="{{  path('app_homepage') }}">Authors with Passion</a>
+
+        <div class="navbar-nav">
+            <a class="nav-item nav-link active" href="{{ path('app_homepage') }}">Home <span class="sr-only">(current)</span></a>
+            <a class="nav-item nav-link" href="{{ path('app_leaderboard') }}">Leaderboard</a>
+            {#<a class="nav-item nav-link" href="#">Pricing</a> #}
+        </div>
+
+    <form class="form-inline">
+        <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+        <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+    </form>
 </nav>
 {% block body %}{% endblock %}
 {% block javascripts %}{% endblock %}
+
 </body>
 </html>
+
+{#
+<a class="navbar-brand" href="{{ path('app_homepage') }}">
+        <i style="color: #444; font-size: 2rem;" class="pb-1 fad fa-cauldron"></i>
+        <p class="pl-2 d-inline font-weight-bold" style="color: #444;">Cauldron Overflow</p>
+    </a>
+#}
