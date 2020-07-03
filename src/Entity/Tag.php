@@ -33,15 +33,7 @@ class Tag
     /**
      * @var \Doctrine\Common\Collections\Collection
      *
-     * @ORM\ManyToMany(targetEntity="Article", inversedBy="tagid")
-     * @ORM\JoinTable(name="articlestags",
-     *   joinColumns={
-     *     @ORM\JoinColumn(name="TagID", referencedColumnName="TagsID")
-     *   },
-     *   inverseJoinColumns={
-     *     @ORM\JoinColumn(name="ArticleID", referencedColumnName="ArticlesID")
-     *   }
-     * )
+     * @ORM\ManyToMany(targetEntity="Article", mappedBy="tags")
      */
     private $articles;
 

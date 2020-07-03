@@ -1,0 +1,24 @@
+{% extends 'base.html.twig' %}
+{% form_theme form with ['bootstrap_4_layout.html.twig'] %}
+
+{% block body %}
+    <div class="container author-form">
+        {{ form_start(form) }}
+        <div class="row">
+            <div class="col">
+                {{ form_row(form.Name) }}
+            </div>
+            <div class="col">
+                {{ form_row(form.Surname) }}
+            </div>
+        </div>
+        <div class="nickname-row">
+            {{ form_row(form.Nickname) }}
+        </div>
+        <div class="email-form">
+            {{ form_row(form.Email) }}
+        </div>
+        {{ form_errors(form) }}
+        {{ form_end(form) }}
+    </div>
+{% endblock %}

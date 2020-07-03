@@ -2,26 +2,23 @@
 
 {% block body %}
 
-    <div class="container">
+    <div class="container" >
         {% for article in articles %}
 
         <h1>{{ article.getTitle() }}</h1>
         <p>{{ article.getContent()[:400]|striptags ~ ' ...' }}</p>
         <div>
-            <h5><span class="badge badge-info">{{ article.getCreationDate()|date("m/d/Y") }}</span></h5>
-            {#format_datetime(,"m/d/Y", #}
-            <div class="float-right">
+            <h5 class="d-inline"><span class="badge badge-info">{{ article.getCreationDate()|date("m/d/Y") }}</span></h5>
+            <div class="float-right d-inline">
                 {% set tags = article.getTags() %}
 
                 {% for tag in tags %}
-                <span class="label">{{ tag.getTagname() }}</span>
+                <span class="badge badge-pill badge-secondary">{{ tag.getTagname() }}</span>
                 {% endfor %}
-
-                <span class="badge badge-pill badge-secondary">fiction</span>
             </div>
         </div>
             <br>
-        <a class="btn btn-blog pull-right marginBottom10" href="{{ path('app_article_show', {id: article.Articlesid()}) }}">READ MORE</a>
+        <a class="btn btn-blog pull-right marginBottom10" href="{{ path('app_article_show', {id: article.Articleid()}) }}">READ MORE</a>
         <hr>
         {% endfor %}
 

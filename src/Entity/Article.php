@@ -7,6 +7,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
+
 /**
  * Article
  *
@@ -22,7 +23,7 @@ class Article
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
-    private $articlesid;
+    private $articleid;
 
     /**
      * @var string
@@ -53,12 +54,15 @@ class Article
      *   @ORM\JoinColumn(name="AuthorID", referencedColumnName="AuthorsID")
      * })
      */
-    private $authorid;
+    private $author;
 
     /**
      * @var \Doctrine\Common\Collections\Collection
      *
-     * @ORM\ManyToMany(targetEntity="Tag", mappedBy="articles")
+     * @ORM\ManyToMany(targetEntity="Tag", inversedBy="articles",  cascade={"persist", "remove"})
+     * @ORM\JoinTable(name="articlestags",
+     *     joinColumns={@ORM\JoinColumn(name="ArticleID", referencedColumnName="ArticlesID")},
+     *      inverseJoinColumns={@ORM\JoinColumn(name="TagID", referencedColumnName="TagsID")} )
      */
     private $tags;
 
@@ -70,9 +74,9 @@ class Article
         $this->tags = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
-    public function getArticlesid(): ?int
+    public function getArticleid(): ?int
     {
-        return $this->articlesid;
+        return $this->articleid;
     }
 
     public function getTitle(): ?string
@@ -111,14 +115,14 @@ class Article
         return $this;
     }
 
-    public function getAuthorid(): ?Author
+    public function getAuthor(): ?Author
     {
-        return $this->authorid;
+        return $this->author;
     }
 
-    public function setAuthorid(?Author $authorid): self
+    public function setAuthor(?Author $author): self
     {
-        $this->authorid = $authorid;
+        $this->author = $author;
 
         return $this;
     }
@@ -135,7 +139,7 @@ class Article
     {
         if (!$this->tags->contains($tag)) {
             $this->tags[] = $tag;
-            $tag->addArticleid($this);
+            $tag->addArticle($this);
         }
 
         return $this;
@@ -145,7 +149,7 @@ class Article
     {
         if ($this->tags->contains($tag)) {
             $this->tags->removeElement($tag);
-            $tag->removeArticleid($this);
+            $tag->removeArticle($this);
         }
 
         return $this;

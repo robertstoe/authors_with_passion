@@ -1,127 +1,69 @@
-body {
-    font-family: spartan;
-    color: #444;
+.nickname-row {
+    width: 50%;
 }
 
-.jumbotron-img {
-    background: rgb(237,116,88);
-    background: linear-gradient(302deg, rgba(237,116,88,1) 16%, rgba(51,61,81,1) 97%);
-    color: #fff;
+.author-form{
+    padding-top: 30px;
+    padding-bottom: 10px;
 }
 
-.q-container {
-    border-top-right-radius: .25rem;
-    border-top-left-radius: .25rem;
-    background-color: #efefee;
+.article-form{
+    padding-top: 10px;
 }
 
-.q-container-show {
-    border-top-right-radius: .25rem;
-    border-top-left-radius: .25rem;
-    background-color: #ED7458 ;
+.email-form{
+    width: 60%;
 }
 
-.q-container img, .q-container-show img {
-    border: 2px solid #fff;
-    border-radius: 50%;
+.title-row{
+    width: 100%;
 }
 
-.q-display {
-    background: #fff;
-    border-radius: .25rem;
-}
-.q-title-show {
-    text-transform: uppercase;
-    font-size: 1.3rem;
-    color: #fff;
-}
-.q-title {
-    text-transform: uppercase;
-    color: #444;
+.like-content {
+    display: inline-block;
+    width: 100%;
+    font-size: 18px;
 }
 
-.q-title:hover {
-    color: #2B2B2B;
+.like-content span {
+    color: #9d9da4;
+    font-family: monospace;
 }
 
-.q-title h2 {
-    font-size: 1.3rem;
+.like-content .btn-secondary {
+    display: block;
+    margin: 5px 0px 0px;
+    text-align: center;
+    background: #ed2553;
+    border-radius: 3px;
+    box-shadow: 0 10px 20px -8px rgb(240, 75, 113);
+    padding: 10px 17px;
+    font-size: 18px;
+    cursor: pointer;
+    border: none;
+    outline: none;
+    color: #ffffff;
+    text-decoration: none;
+    -webkit-transition: 0.3s ease;
+    transition: 0.3s ease;
 }
 
-.q-display-response {
-    background: #333D51;
-    color: #fff;
+.like-content .btn-secondary:hover {
+    transform: translateY(-3px);
 }
 
-.answer-link:hover .magic-wand {
-  transform: rotate(20deg);
+.like-content .btn-secondary .fa {
+    margin-right: 5px;
 }
 
-.vote-arrows {
-    font-size: 1.5rem;
+.animate-like {
+    animation-name: likeAnimation;
+    animation-iteration-count: 1;
+    animation-fill-mode: forwards;
+    animation-duration: 0.65s;
 }
 
-.vote-arrows span {
-    font-size: 1rem;
-}
-
-.vote-arrows a {
-    color: #444;
-}
-
-.vote-up:hover {
-    color: #3D9970;
-}
-.vote-down:hover {
-    color: #FF4136;
-}
-
-.btn-question { 
-  color: #FFFFFF; 
-  background-color: #ED7458; 
-  border-color: #D45B3F; 
-} 
- 
-.btn-question:hover, 
-.btn-question:focus, 
-.btn-question:active, 
-.btn-question.active, 
-.open .dropdown-toggle.btn-question { 
-  color: #FFFFFF; 
-  background-color: #D45B3F; 
-  border-color: #D45B3F; 
-} 
- 
-.btn-question:active, 
-.btn-question.active, 
-.open .dropdown-toggle.btn-question { 
-  background-image: none; 
-} 
- 
-.btn-question.disabled, 
-.btn-question[disabled], 
-fieldset[disabled] .btn-question, 
-.btn-question.disabled:hover, 
-.btn-question[disabled]:hover, 
-fieldset[disabled] .btn-question:hover, 
-.btn-question.disabled:focus, 
-.btn-question[disabled]:focus, 
-fieldset[disabled] .btn-question:focus, 
-.btn-question.disabled:active, 
-.btn-question[disabled]:active, 
-fieldset[disabled] .btn-question:active, 
-.btn-question.disabled.active, 
-.btn-question[disabled].active, 
-fieldset[disabled] .btn-question.active { 
-  background-color: #ED7458; 
-  border-color: #D45B3F; 
-} 
- 
-.btn-question .badge { 
-  color: #ED7458; 
-  background-color: #FFFFFF; 
-}
-
-footer {
-    background-color: #efefee;
+@keyframes likeAnimation {
+    0%   { transform: scale(30); }
+    100% { transform: scale(1); }
 }

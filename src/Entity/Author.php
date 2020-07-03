@@ -20,7 +20,7 @@ class Author
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
-    private $authorsid;
+    private $authorid;
 
     /**
      * @var string
@@ -44,11 +44,18 @@ class Author
     private $email;
 
     /**
-     * @var float|null
+     * @var integer
      *
-     * @ORM\Column(name="Rating", type="float", precision=10, scale=0, nullable=true)
+     * @ORM\Column(name="total_score", type="integer", nullable=true)
      */
-    private $rating;
+    private $total_score = 0;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="total_votes", type="integer", nullable=true)
+     */
+    private $total_votes = 0;
 
     /**
      * @var string
@@ -57,9 +64,9 @@ class Author
      */
     private $nickname;
 
-    public function getAuthorsid(): ?int
+    public function getAuthorid(): ?int
     {
-        return $this->authorsid;
+        return $this->authorid;
     }
 
     public function getName(): ?string
@@ -100,12 +107,22 @@ class Author
 
     public function getRating(): ?float
     {
-        return $this->rating;
+        if($this->total_votes == 0)
+            return 0;
+
+        return number_format((float)$this->total_score / $this->total_votes, 2, '.', '');
     }
 
-    public function setRating(?float $rating): self
+    public function setTotalscore(?int $score): self
     {
-        $this->rating = $rating;
+        $this->total_score = $this->total_score + $score;
+
+        return $this;
+    }
+
+    public function setTotalvotes(): self
+    {
+        $this->total_votes = $this->total_votes + 1;
 
         return $this;
     }
