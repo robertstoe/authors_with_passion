@@ -41,6 +41,7 @@ class AuthorController extends AbstractController
     public function createValidateAuthor(Request $request)
     {
         $author = new Author();
+        $author = $author->setJoinDate(new \DateTime('now'));
 
         $form = $this->createForm(AuthorType::class, $author);
 
@@ -58,13 +59,14 @@ class AuthorController extends AbstractController
                 return $this->redirectToRoute('app_create_article', ['id' => $id = $authortocheck->getAuthorid()]);
             }
 
+
             // ... perform some action, such as saving the task to the database
             // for example, if Task is a Doctrine entity, save it!
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($author);
             $entityManager->flush();
 
-            return $this->redirectToRoute('app_create_article', ['author' => $author]);
+            return $this->redirectToRoute('app_create_article', ['id' => $id = $author->getAuthorid()]);
         }
 
         return $this->render('create/create-validate-author.html.twig', ['form' => $form->createView()]);

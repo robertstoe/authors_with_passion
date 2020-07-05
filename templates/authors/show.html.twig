@@ -1,15 +1,48 @@
 {% extends 'base.html.twig' %}
 
+
 {% block body %}
-    <h1>
-        {{ author.getName() }} "{{ author.getNickname() }}" {{ author.getSurname() }}
-        <br>
-        Rating: {{ author.getTotalvotes() }}
-    </h1>
-    <br>
-    <ul>
-        {% for article in articles %}
-            <li><a href="{{ path('app_article_show', {id: article.Articleid()}) }}"> {{ article.getTitle() }}</li> </a>
-        {% endfor %}
-    </ul>
+    <link href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+
+    <div class="container">
+        <div class="row">
+            <div class="col-xs-12 col-sm-6 col-md-6">
+                <div class="well well-sm">
+                    <div class="row">
+                        <div class="col-sm-6 col-md-4">
+                            <img src="{{ asset('images/default-user-icon.jpg') }}" alt="" class="img-rounded img-responsive" />
+                        </div>
+                        <div class="col-sm-6 col-md-8">
+                            <h4>{{ author.getName() }} "{{ author.getNickname() }}" {{ author.getSurname() }}</h4>
+
+                            <p>
+                                <i class="glyphicon glyphicon-star">
+                                    {% if author.getTotalVotes == 0 %}
+                                        0
+                                    {% else %}
+                                        {% set rating = author.getTotalScore() / author.getTotalVotes() %}
+                                        {{ rating|round(2, 'floor') }}
+                                    {% endif %}
+                                </i>
+                                <br />
+                                <i class="glyphicon glyphicon-gift"></i>{{ author.getJoinDate()|date("m/d/Y") }}</p>
+                        </div>
+                    </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <br />
+        <div class="row">
+            <div class="list-right col-md-5">
+                <div class="well">
+                    <ul class="list-group">
+                        {% for article in articles %}
+                            <li class="list-group-item"><a href="{{ path('app_article_show', {id: article.Articleid()}) }}" style=" color: black; text-decoration: none"> {{ article.getTitle() }}</li> </a>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+    </div>
 {% endblock %}

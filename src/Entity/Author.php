@@ -63,6 +63,13 @@ class Author
      */
     private $nickname;
 
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="join_date", type="datetime")
+     */
+    private $join_date;
+
     public function getAuthorid(): ?int
     {
         return $this->authorid;
@@ -140,5 +147,14 @@ class Author
         return $this;
     }
 
+    public function getJoinDate(): \DateTimeInterface
+    {
+        return $this->join_date;
+    }
 
+    public function setJoinDate(\DateTimeInterface $join_date): self
+    {
+        $this->join_date = $join_date;
+        return $this;
+    }
 }

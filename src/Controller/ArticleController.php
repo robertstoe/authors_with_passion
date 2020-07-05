@@ -42,14 +42,6 @@ class ArticleController extends AbstractController
     }
 
     /**
-     * @Route("/test", name="app_test")
-     */
-    public function testing()
-    {
-        return $this->render('test.html.twig');
-    }
-
-    /**
      * @Route("/article/upvote/{id}", name="app_article_upvote")
      */
     public function upvote(Request $request, $id)
