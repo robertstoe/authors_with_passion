@@ -3,34 +3,40 @@
 
 {% block body %}
     {% set num = 1 %}
-    <table class="table table-striped table-dark">
-        <tr>
-            <thead>
-                <th scope="col">
-                    #
-                </th>
-                <th scope="col">
-                    Name:
-                </th>
-                <th scope="col">
-                    Rating:
-                </th>
-            </thead>
-        </tr>
-        {% for author in authors %}
+    <div class="table">
+        <table class="table table-striped table-dark">
             <tr>
-                <th scope="row">
-                    {{ num }}
-                </th>
-                <td>
-                    <a href="{{ path('app_author_show', {id: author.Authorid()}) }}" style=" color: white; text-decoration: none"> {{ author.getName() }} "{{ author.getNickname()}}" {{ author.getSurname() }} </a>
-                </td>
-                <td>
-                    {{ author.getRating() }}
-                </td>
+                <thead>
+                    <th scope="col">
+                        #
+                    </th>
+                    <th scope="col">
+                        Name:
+                    </th>
+                    <th scope="col">
+                        Rating:
+                    </th>
+                </thead>
             </tr>
-            {% set num = num + 1 %}
-        {% endfor %}
-    </table>
-
+            {% for author in authors %}
+                <tr>
+                    <th scope="row">
+                        {{ num }}
+                    </th>
+                    <td>
+                        <a href="{{ path('app_author_show', {id: author.Authorid()}) }}" style=" color: white; text-decoration: none"> {{ author.getName() }} "{{ author.getNickname()}}" {{ author.getSurname() }} </a>
+                    </td>
+                    <td>
+                        {% if author.getTotalVotes == 0 %}
+                        <div>0</div>
+                        {% else %}
+                            {% set rating = author.getTotalScore() / author.getTotalVotes() %}
+                            {{ rating|round(2, 'floor') }}
+                        {% endif %}
+                    </td>
+                </tr>
+                {% set num = num + 1 %}
+            {% endfor %}
+        </table>
+    </div>
 {% endblock %}

@@ -29,7 +29,7 @@ class AuthorController extends AbstractController
     {
         $author = $this->getDoctrine()->getRepository(Author::class)->find($id);
 
-        $articles = $this->getDoctrine()->getRepository(Article::class)->findBy(['authorid' => $id]);
+        $articles = $this->getDoctrine()->getRepository(Article::class)->findBy(['author' => $id]);
 
         return $this->render('/authors/show.html.twig', array('author' => $author, 'articles' => $articles));
     }
@@ -63,8 +63,6 @@ class AuthorController extends AbstractController
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($author);
             $entityManager->flush();
-
-            $id = $author->getAuthorid();
 
             return $this->redirectToRoute('app_create_article', ['author' => $author]);
         }

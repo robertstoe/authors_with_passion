@@ -7,12 +7,30 @@ use App\Entity\Article;
 use App\Entity\Author;
 use App\Entity\Tag;
 use App\Form\Type\ArticleType;
+use App\Model\UserRating;
+use Symfony\Component\HttpFoundation\Cookie;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Annotation\Method;
+use Symfony\Component\Serializer\Encoder\JsonEncoder;
+use Symfony\Component\Serializer\Encoder\XmlEncoder;
+use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
+use Symfony\Component\Serializer\Serializer;
 
 class ArticleController extends AbstractController
 {
+    private $serializer;
+
+    public function __construct()
+    {
+        $encoders = [new XmlEncoder(), new JsonEncoder()];
+        $normalizers = [new ObjectNormalizer()];
+
+        $this->serializer = new Serializer($normalizers, $encoders);
+    }
+
     /**
      * @Route ("/", name="app_homepage")
      */
@@ -32,6 +50,41 @@ class ArticleController extends AbstractController
     }
 
     /**
+     * @Route("/article/upvote/{id}", name="app_article_upvote")
+     */
+    public function upvote(Request $request, $id)
+    {
+        $response = new Response('success');
+
+        $article = $this->getDoctrine()->getRepository(Article::class)->find($id);
+
+        $author = $article->getAuthor();
+
+        $ratings = $author->getTotalScore();
+        $votes = $author->getTotalVotes();
+
+        $ratingValue = $request->get('value');
+
+        $author = $author->setTotalScore($ratings + $ratingValue);
+        $author = $author->setTotalVotes($votes + 1);
+
+        $userrating = new UserRating();
+        $userrating = $userrating->setRating($ratingValue);
+        $userrating = $userrating->setArticleid($id);
+
+        $jsonContent = $this->serializer->serialize($userrating, 'json');
+
+        $cookie = new Cookie('ratingValues' . $id, $jsonContent, time()+31556926);
+        $response->headers->setCookie($cookie);
+
+        $em = $this->getDoctrine()->getManager();
+        $em->persist($author);
+        $em->flush();
+
+        return $response;
+    }
+
+    /**
      * @param Request $request
      * @Route("/create/article/{id}", name="app_create_article")
      */
@@ -43,20 +96,13 @@ class ArticleController extends AbstractController
         $article->setCreationDate(new \DateTime('now'));
         $article->setAuthor($author);
 
-        $group = $this->getDoctrine()->getRepository(Tag::class)->findAll();
-
-        $form = $this->createForm(ArticleType::class, $article
-            //, array('data' => $group)
-        );
+        $form = $this->createForm(ArticleType::class, $article);
 
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             // $form->getData() holds the submitted values
             // but, the original `$task` variable has also been updated
             $article = $form->getData();
-
-            $tag = $this->getDoctrine()->getRepository(Tag::class)->find(3);
-            $article->addTag($tag);
 
             //dd($article->getTags());
             // ... perform some action, such as saving the task to the database
@@ -73,12 +119,27 @@ class ArticleController extends AbstractController
     }
 
     /**
+     * @param Request $request
      * @Route ("/article/{id}", name="app_article_show")
      */
-    public function show($id)
+    public function show(Request $request, $id)
     {
+        $jsonContent = $request->cookies->get('ratingValues' . $id);
+
+        $userrating = null;
+
+        if($jsonContent != null) {
+            $userrating = $this->serializer->deserialize($jsonContent, 'App\Model\UserRating', 'json');
+        }
+
         $article = $this->getDoctrine()->getRepository(Article::class)->find($id);
 
-        return $this->render('articles/show.html.twig', array('article'=>$article, 'author'=>$article->getAuthor(), 'tags'=>$article->getTags()));
+        return $this->render('articles/show.html.twig',
+            array(
+                'article'=>$article,
+                'author'=>$article->getAuthor(),
+                'tags'=>$article->getTags(),
+                'rating' => $userrating
+            ));
     }
 }

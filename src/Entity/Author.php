@@ -2,7 +2,6 @@
 
 namespace App\Entity;
 
-use App\Repository\AuthorRepository;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -105,26 +104,28 @@ class Author
         return $this;
     }
 
-    public function getRating(): ?float
+    public function getTotalScore(): ?int
     {
-        if($this->total_votes == 0)
-            return 0;
-
-        return number_format((float)$this->total_score / $this->total_votes, 2, '.', '');
+        return $this->total_score;
     }
 
-    public function setTotalscore(?int $score): self
+    public function setTotalScore(?int $score): self
     {
         $this->total_score = $this->total_score + $score;
 
         return $this;
     }
 
-    public function setTotalvotes(): self
+    public function setTotalVotes(int $total_votes): self
     {
-        $this->total_votes = $this->total_votes + 1;
+        $this->total_votes = $total_votes;
 
         return $this;
+    }
+
+    public function getTotalVotes(): ?int
+    {
+        return $this->total_votes;
     }
 
     public function getNickname(): ?string

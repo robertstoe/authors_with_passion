@@ -20,15 +20,53 @@
                     <div class="article-content">
                         <p>{{ article.getContent() }}</p>
                     </div>
+                    {% if rating == null %}
+                        <script type="text/javascript">
+                            $(function(){
+                                $("#rating-block").click(function(e) {
+                                    if (e.target.tagName.toUpperCase() === "LABEL") {
+                                        return;
+                                    }
+                                    var rating_value = $(":radio[name=rating]:checked").val();
+                                    $.ajax({
+                                        type: 'POST',
+                                        url: "{{ path('app_article_upvote', {id: article.getArticleid()}) }}",
+                                        data: {value: rating_value},
+                                        success: function(){},
+                                    })
+                                });
+                            });
+                        </script>
 
-                    <script src="{{ asset('js/like-button.js') }}"></script>
-                    <form>
-                        <div class="like-content">
-                            <button type="submit" class="btn-secondary like-review">
-                                <i class="fa fa-heart" aria-hidden="true"></i> Like
-                            </button>
+                        <div id="rating-block">
+                            <div class="star-rating">
+                                <input type="radio" id="5-stars" name="rating" value="5" />
+                                <label for="5-stars" class="star">&#9733;</label>
+                                <input type="radio" id="4-stars" name="rating" value="4" />
+                                <label for="4-stars" class="star">&#9733;</label>
+                                <input type="radio" id="3-stars" name="rating" value="3" />
+                                <label for="3-stars" class="star">&#9733;</label>
+                                <input type="radio" id="2-stars" name="rating" value="2" />
+                                <label for="2-stars" class="star">&#9733;</label>
+                                <input type="radio" id="1-star" name="rating" value="1" />
+                                <label for="1-star" class="star">&#9733;</label>
+                            </div>
                         </div>
-                    </form>
+                    {% else %}
+                        <div id="rating-block">
+                            <div class="star-rating">
+                        {% for i in 5..1  %}
+                            {% if i == rating.getRating() %}
+                                <input type="radio" id="{{ i }}-stars" name="rating" value="{{ i }}" checked="checked" />
+                                <label for="{{ i }}-stars" class="star">&#9733;</label>
+                            {% else %}
+                                <input type="radio disabled" id="{{ i }}-stars" name="rating" value="{{ i }}" />
+                                <label for="{{ i }}-stars" class="star">&#9733;</label>
+                            {% endif %}
+                        {% endfor %}
+                            </div>
+                        </div>
+                    {% endif %}
                 </div>
             </div>
         </div>
