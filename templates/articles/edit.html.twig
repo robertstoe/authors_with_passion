@@ -1,0 +1,23 @@
+{% extends 'base.html.twig' %}
+{% form_theme form with ['bootstrap_4_layout.html.twig'] %}
+
+{% block body %}
+    <div class="container article-form">
+        <h1>Edit article</h1>
+        {{ form_start(form) }}
+        {{ form_errors(form) }}
+        <div class="col">
+            {{ form_row(form.Title) }}
+        </div>
+        <div class="col">
+            {{ form_row(form.Content) }}
+        </div>
+        <div class="col">
+            <div class="row">
+                {{ form_row(form.Tags) }}
+            </div>
+        </div>
+        {{ form_end(form) }}
+    </div>
+    </div>
+{% endblock %}

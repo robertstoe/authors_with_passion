@@ -118,7 +118,7 @@ class Author
 
     public function setTotalScore(?int $score): self
     {
-        $this->total_score = $this->total_score + $score;
+        $this->total_score = $score;
 
         return $this;
     }

@@ -9,11 +9,6 @@
         <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Spartan&display=swap">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous" />
         <link rel="stylesheet" href="{{ asset('css/app.css') }}">
-        {#
-        <link rel="stylesheet" href="{{ asset('css/bootstrap.css') }}">
-        <link rel="stylesheet" href="{{ asset('css/bootstrap-grid.css') }}">
-        <link rel="stylesheet" href="{{ asset('css/bootstrap-reboot.css') }}">
-        #}
     {% endblock %}
 </head>
 <body>
@@ -26,10 +21,9 @@
             <a class="nav-item nav-link" href="{{ path('app_create_validate_author') }}">Create article</a>
         </div>
     <div class="float-right">
-        <form class="form-inline">
-            <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
-            <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
-        </form>
+        {{ render(controller(
+            'App\\Controller\\SearchController::searchBar'
+        )) }}
     </div>
 </nav>
 <div>

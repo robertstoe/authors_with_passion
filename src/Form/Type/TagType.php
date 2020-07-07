@@ -16,12 +16,4 @@ class TagType extends AbstractType
     {
         $builder->add('name', TextType::class);
     }
-/*
-    public function configureOptions(OptionsResolver $resolver)
-    {
-        $resolver->setDefaults([
-            'data_class' => Tag::class,
-        ]);
-    }
-*/
 }

@@ -28,11 +28,26 @@
                                         return;
                                     }
                                     var rating_value = $(":radio[name=rating]:checked").val();
+                                    alert(rating_value);
                                     $.ajax({
                                         type: 'POST',
                                         url: "{{ path('app_article_upvote', {id: article.getArticleid()}) }}",
-                                        data: {value: rating_value},
-                                        success: function(){},
+                                        success: function(){
+                                            var i;
+                                            for (i = 5; i >= 1; i--)
+                                            {
+                                                if (i == rating_value) {
+                                                    var radio = document.getElementById( i + '-stars');
+                                                    var att = document.createAttribute("checked");
+                                                    att.value = "checked";
+                                                    radio.setAttributeNode(att);
+                                                }
+                                                else
+                                                {
+                                                    document.getElementById( i + '-stars').type = "radio disabled"
+                                                }
+                                            }
+                                        },
                                     })
                                 });
                             });
@@ -48,7 +63,7 @@
                                 <label for="3-stars" class="star">&#9733;</label>
                                 <input type="radio" id="2-stars" name="rating" value="2" />
                                 <label for="2-stars" class="star">&#9733;</label>
-                                <input type="radio" id="1-star" name="rating" value="1" />
+                                <input type="radio" id="1-stars" name="rating" value="1" />
                                 <label for="1-star" class="star">&#9733;</label>
                             </div>
                         </div>
@@ -67,6 +82,26 @@
                             </div>
                         </div>
                     {% endif %}
+
+                    <script type="text/javascript">
+                        $(function(){
+                            $(document).one('click', '.edit-button', function(e) {
+                                var article = {{ article.getArticleid() }};
+                                $.ajax({
+                                    type: 'POST',
+                                    url: "{{ path('app_edit_email', {receiver: author.getEmail()}) }}",
+                                    data: {articleid: article},
+                                    success: function(){},
+                                })
+                            });
+                        });
+                    </script>
+
+                    <div class="d-inline edit-button">
+                        <button class="btn-secondary">
+                            Edit
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>

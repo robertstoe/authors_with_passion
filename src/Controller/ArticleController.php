@@ -5,7 +5,6 @@ namespace App\Controller;
 
 use App\Entity\Article;
 use App\Entity\Author;
-use App\Entity\Tag;
 use App\Form\Type\ArticleType;
 use App\Model\UserRating;
 use Symfony\Component\HttpFoundation\Cookie;
@@ -48,30 +47,35 @@ class ArticleController extends AbstractController
     {
         $response = new Response('success');
 
-        $article = $this->getDoctrine()->getRepository(Article::class)->find($id);
+        $jsonContent = $request->cookies->get('ratingValues' . $id);
 
-        $author = $article->getAuthor();
+        if($jsonContent == null)
+        {
+            $article = $this->getDoctrine()->getRepository(Article::class)->find($id);
 
-        $ratings = $author->getTotalScore();
-        $votes = $author->getTotalVotes();
+            $author = $article->getAuthor();
 
-        $ratingValue = $request->get('value');
+            $ratings = $author->getTotalScore();
+            $votes = $author->getTotalVotes();
 
-        $author = $author->setTotalScore($ratings + $ratingValue);
-        $author = $author->setTotalVotes($votes + 1);
+            $ratingValue = $request->get('value');
 
-        $userrating = new UserRating();
-        $userrating = $userrating->setRating($ratingValue);
-        $userrating = $userrating->setArticleid($id);
+            $author = $author->setTotalScore($ratings + $ratingValue);
+            $author = $author->setTotalVotes($votes + 1);
 
-        $jsonContent = $this->serializer->serialize($userrating, 'json');
+            $userrating = new UserRating();
+            $userrating = $userrating->setRating($ratingValue);
+            $userrating = $userrating->setArticleid($id);
 
-        $cookie = new Cookie('ratingValues' . $id, $jsonContent, time()+31556926);
-        $response->headers->setCookie($cookie);
+            $jsonContent = $this->serializer->serialize($userrating, 'json');
 
-        $em = $this->getDoctrine()->getManager();
-        $em->persist($author);
-        $em->flush();
+            $cookie = new Cookie('ratingValues' . $id, $jsonContent, time()+31556926);
+            $response->headers->setCookie($cookie);
+
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($author);
+            $em->flush();
+        }
 
         return $response;
     }
@@ -96,11 +100,9 @@ class ArticleController extends AbstractController
             // but, the original `$task` variable has also been updated
             $article = $form->getData();
 
-            //dd($article->getTags());
             // ... perform some action, such as saving the task to the database
             // for example, if Task is a Doctrine entity, save it!
             $entityManager = $this->getDoctrine()->getManager();
-            //$entityManager->persist($article->getTags());
             $entityManager->persist($article);
             $entityManager->flush();
 
@@ -125,6 +127,12 @@ class ArticleController extends AbstractController
         }
 
         $article = $this->getDoctrine()->getRepository(Article::class)->find($id);
+/*
+        $encrypt = $this->encrypt('testing123');
+        dump($encrypt);
+        $decrypt = $this->decrypt($encrypt);
+        dump($decrypt);
+*/
 
         return $this->render('articles/show.html.twig',
             array(
@@ -134,4 +142,57 @@ class ArticleController extends AbstractController
                 'rating' => $userrating
             ));
     }
+
+    /**
+     * @Route("/article/edit/{id}", name="app_article_edit")
+     */
+    public function edit(Request $request, $id)
+    {
+        $article = $this->getDoctrine()->getRepository(Article::class)->find($id);
+
+        $form = $this->createForm(ArticleType::class, $article);
+
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid())
+        {
+            dump($article);
+            $article = $form->getData();
+            //dd($article);
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($article);
+            $em->flush();
+
+            $this->addFlash('success', 'Article Updated! Inaccuracies squashed!');
+
+            return $this->redirectToRoute('app_article_show', ['id' => $article->getArticleid()]);
+        }
+
+        return $this->render('articles/edit.html.twig', ['form' => $form->createView()]);
+    }
+/*
+    function encrypt($string) {
+        $output = false;
+        $encrypt_method = “AES-256-CBC”;
+        $secret_key = ‘fe67d68ee1e09b47acd8810b880d537034c10c15344433a992b9c79002666844’;
+        $secret_iv = ‘fdd3345455fffgffffhkkyoife67d68ee1e09b47acd8810b880d537034c10c15344433a992b9c79002666844’;
+
+        $key = hash(‘sha256’, $secret_key);
+        $iv = substr(hash(‘sha256’, $secret_iv), 0, 16);
+        $output = openssl_encrypt($string, $encrypt_method, $key, 0, $iv);
+        $output = base64_encode($output);
+        return $output;
+    }
+
+    function decrypt($string) {
+        $output = false;
+        $encrypt_method = “AES-256-CBC”;
+        $secret_key = ‘fe67d68ee1e09b47acd8810b880d537034c10c15344433a992b9c79002666844’;
+        $secret_iv = ‘fdd3345455fffgffffhkkyoife67d68ee1e09b47acd8810b880d537034c10c15344433a992b9c79002666844’;
+
+        $key = hash("sha256", $secret_key);
+        $iv = substr(hash("sha256", $secret_iv), 0, 16);
+        $output = openssl_decrypt(base64_decode($string), $encrypt_method, $key, 0, $iv);
+        return $output;
+    }
+    */
 }

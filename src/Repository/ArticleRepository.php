@@ -3,6 +3,8 @@
 namespace App\Repository;
 
 use App\Entity\Article;
+use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\ORM\EntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -11,20 +13,38 @@ use Doctrine\Persistence\ManagerRegistry;
  * @method Article[]    findAll()
  * @method Article[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class ArticleRepository
+class ArticleRepository extends EntityRepository
 {
     /**
      * @var App\Entity\Repository\DoctrineArticleRepository
      */
     private $doctrineArticleRepo;
 
-    public function __construct(ManagerRegistry $registry)
+
+    public function __construct(EntityManagerInterface $manager)
     {
-        parent::__construct($registry, Article::class);
+        parent::__construct($manager, $manager->getClassMetadata(Article::class));
+    }
+
+    public function findArticlesByTitle(string $query)
+    {
+        $qb = $this->createQueryBuilder('p');
+        $qb
+            ->where(
+                $qb->expr()->andX(
+                    $qb->expr()->orX(
+                        $qb->expr()->like('p.title',':query')
+                    ),
+                    $qb->expr()->isNotNull('p.creationDate')
+                )
+            )
+            ->setParameter('query', '%' . $query . '%');
+
+        return $qb->getQuery()->getResult();
     }
 
     // /**
-    //  * @return Article[] Returns an array of Author objects
+    //  * @return Article[] Returns an array of Article objects
     //  */
     /*
     public function findByExampleField($value)
