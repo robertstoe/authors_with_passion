@@ -52,6 +52,7 @@ class ArticleController extends AbstractController
         if($jsonContent == null)
         {
             $article = $this->getDoctrine()->getRepository(Article::class)->find($id);
+            $article->setCanEdit(0);
 
             $author = $article->getAuthor();
 
@@ -91,6 +92,7 @@ class ArticleController extends AbstractController
 
         $article->setCreationDate(new \DateTime('now'));
         $article->setAuthor($author);
+        $article->setCanEdit(1);
 
         $form = $this->createForm(ArticleType::class, $article);
 
@@ -127,12 +129,6 @@ class ArticleController extends AbstractController
         }
 
         $article = $this->getDoctrine()->getRepository(Article::class)->find($id);
-/*
-        $encrypt = $this->encrypt('testing123');
-        dump($encrypt);
-        $decrypt = $this->decrypt($encrypt);
-        dump($decrypt);
-*/
 
         return $this->render('articles/show.html.twig',
             array(

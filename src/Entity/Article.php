@@ -67,6 +67,13 @@ class Article
     private $tags;
 
     /**
+     * @var bool
+     *
+     * @ORM\Column(name="can_edit", type="boolean")
+     */
+    private $can_edit;
+
+    /**
      * Constructor
      */
     public function __construct()
@@ -152,6 +159,17 @@ class Article
             $tag->removeArticle($this);
         }
 
+        return $this;
+    }
+
+    public function getCanEdit(): ?bool
+    {
+        return $this->can_edit;
+    }
+
+    public function setCanEdit(bool $can_edit): self
+    {
+        $this->can_edit = $can_edit;
         return $this;
     }
 
